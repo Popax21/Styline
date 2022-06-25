@@ -1,0 +1,806 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Procedurline</name>
+    </assembly>
+    <members>
+        <member name="T:Celeste.Mod.Procedurline.ContentHookAttribute">
+            <summary>
+            Marks this method as a hook to apply to a content method.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ContentILHookAttribute">
+            <summary>
+            Marks this method as an IL hook to apply to a content method.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ContentVirtualizeAttribute">
+            <summary>
+            Marks this content method for virtualization using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomBooster.OnPlayerEnter(Celeste.Player)">
+            <summary>
+            Called when the player enters your booster. Return the type of boost it should give them, or <c>null</c> if no default behaviour should take place.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnActivate">
+            <summary>
+            Called when your dream block gets activated. Return false if you don't want to activate it.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnDeactivate">
+            <summary>
+            Called when your dream block gets deactivated. Return false if you don't want to deactivate it.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomRefill.OnTouch(Celeste.Player)">
+            <summary>
+            Called when the player touches your refill. Return <c>true</c> if it should break, or <c>false</c> otherwise.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.GlobalManager">
+            <summary>
+            Handles global state, hooks, scopes, and other miscellaneous things.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.GlobalManager.BlockEngineOnTask(System.Threading.Tasks.Task)">
+            <summary>
+            Prevents the engine (and as such, the game) from updating until the given task completes.
+            This is better than <see cref="M:System.Threading.Tasks.Task.Wait" /> as it prevents deadlocks when the task is waiting for another Procedurline component, which is still updated this way.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.AsyncRef`1">
+            <summary>
+            A simple class allowing to pass values by reference asynchronously
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.AsyncUtils.ContinueWithOrInvoke(System.Threading.Tasks.Task,System.Action{System.Threading.Tasks.Task},System.Threading.CancellationToken)">
+            <summary>
+            Registers a continuation handler, or invokes it immediately if the task already completed
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.AsyncUtils.ContinueWithOrInvoke``1(System.Threading.Tasks.Task{``0},System.Action{System.Threading.Tasks.Task{``0}},System.Threading.CancellationToken)">
+            <summary>
+            Registers a continuation handler, or invokes it immediately if the task already completed
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.AsyncUtils.OrCancelled(System.Threading.Tasks.Task,System.Threading.CancellationToken)">
+            <summary>
+            Returns a new task, which will complete either when the original task does or the given token is cancelled
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.AsyncUtils.OrCancelled``1(System.Threading.Tasks.Task{``0},System.Threading.CancellationToken)">
+            <summary>
+            Returns a new task, which will complete either when the original task does or the given token is cancelled
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.RemoveAlpha(Microsoft.Xna.Framework.Color)">
+            <summary>
+            Removes the alpha component from the color by setting it to 255
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.GetDistance(Microsoft.Xna.Framework.Color,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Gets the Euclidean distance to the given color
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.GetSquaredDistance(Microsoft.Xna.Framework.Color,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Gets the squared Euclidean distance to the given color
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.ComposeHSV(System.Single,System.Single,System.Single)">
+            <summary>
+            Composes a color from its HSV components
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.DecomposeHSV(Microsoft.Xna.Framework.Color,System.Single@,System.Single@,System.Single@)">
+            <summary>
+            Decomposes the color into its HSV components
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.GetHue(Microsoft.Xna.Framework.Color)">
+            <summary>
+            Returns the color's HSV hue
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.GetSaturation(Microsoft.Xna.Framework.Color)">
+            <summary>
+            Returns the color's HSV saturation
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.GetValue(Microsoft.Xna.Framework.Color)">
+            <summary>
+            Returns the color's HSV value
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.CalculateHueShiftMatrix(System.Single)">
+            <summary>
+            Calculates an HSV hue shift matrix. Hue shift matrices are more efficient for shifiting a large quanitity of colors by a certain hue than the naive (de)composition approach.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.CalculateRecolorMatrix(Microsoft.Xna.Framework.Color,Microsoft.Xna.Framework.Color)">
+            <summary>
+            Calculates the recoloring matrix to shift from this color to the specified color. This matrix can be applied to other colors to recolor an entire image.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.ApplyMatrix(Microsoft.Xna.Framework.Color,Microsoft.Xna.Framework.Matrix)">
+            <summary>
+            Applies a color matrix to the color.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.ApplyMatrix(Microsoft.Xna.Framework.Color,Microsoft.Xna.Framework.Matrix,System.Single,System.Single)">
+            <summary>
+            Applies a color matrix to the color, if its HSV saturation and value exceed a given threshold. This can be used to not affect pure grayscale colors.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.ApplyMatrix(Monocle.ParticleType,Microsoft.Xna.Framework.Matrix)">
+            <summary>
+            Applies a color matrix to the particle type.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ColorUtils.ApplyMatrix(Monocle.ParticleType,Microsoft.Xna.Framework.Matrix,System.Single,System.Single)">
+            <summary>
+            Applies a color matrix to the particle type, if its HSV saturation and value exceed a given threshold. This can be used to not affect pure grayscale colors.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.DataCache`2">
+            <summary>
+            Caches data per scope configuration.
+            It allows for queries for per-target data which can be shared between targets belonging to the same set of scopes (= having identical keys)
+            The cache additionally keeps track of scope validity, and automatically disposed the scoped data if the key it belongs to gets invalidated.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.#ctor(Celeste.Mod.Procedurline.IDataScopeRegistrar{`0})">
+            <param name="registrar">
+            If <c>null</c> is provided, cast <c>this</c> to <see cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" /> to allow child classes to implement it themselves
+            </param>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.GetScopedData(`0)">
+            <summary>
+            Retrieves the associated scoped data for the given target.
+            This generates a temporary cache key for the target and tries to look up scoped data in the cache.
+            If there is no scoped data chached for the target's key, new data is created and kept alive until its key gets invalidated.
+            </summary>
+            <returns>
+            <c>null</c> if the target shouldn't have any associated scoped data.
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.CreateKey(`0)">
+            <summary>
+            Creates a new key for use with the scope registrar.
+            Override this method if you want to use your own key class.
+            </summary>
+            <returns>
+            <c>null</c> if the target shouldn't have any associated scoped data
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.CreateScopedData(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Creates new scoped data for a specified cache key
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.DataProcessorCache`3">
+            <summary>
+            Implements a <see cref="T:Celeste.Mod.Procedurline.DataCache`2" /> which caches the processed data of a <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />.
+            For it to work, it is <b>REQUIRED</b> that the given processor behaves correctly in terms of target scopes and ID invariance.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.AsyncDataProcessorCache`3">
+            <summary>
+            Implements a <see cref="T:Celeste.Mod.Procedurline.DataCache`2" /> which caches the processed data of an <see cref="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3" />.
+            For it to work, it is <b>REQUIRED</b> that the given processor behaves correctly in terms of target scope and ID invariance.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.IDataProcessor`3">
+            <summary>
+            Represents a data processor.
+            Data processors process and modify data for a certain target using <see cref="M:Celeste.Mod.Procedurline.IDataProcessor`3.ProcessData(`0,Celeste.Mod.Procedurline.DataScopeKey,`1,`2@)"/>.
+            They also handle target scope registration by implementing <see cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" />
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" />
+            <seealso cref="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IDataProcessor`3.ProcessData(`0,Celeste.Mod.Procedurline.DataScopeKey,`1,`2@)">
+            <summary>
+            Processes and modifies data for a specified target. Returns false if it it didn't modify the data.
+            All data with the same key and ID MUST be processed the same way, or e.g. <see cref="T:Celeste.Mod.Procedurline.DataProcessorCache`3" /> will stop working.
+            DO NOT change your behaviour based on target attributes not encapsulated by different scopes.
+            If <paramref name="key" /> is <c>null</c>, then the above doesn't apply - your code is free to do whatever it wants to. Callers musn't cache the returned data if they don't provide a key.
+            </summary>
+            <returns>
+            Returns <c>false</c> if data wasn't modified
+            </returns>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3">
+            <summary>
+            Same as <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />, but async
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IAsyncDataProcessor`3.ProcessDataAsync(`0,Celeste.Mod.Procedurline.DataScopeKey,`1,Celeste.Mod.Procedurline.AsyncRef{`2},System.Threading.CancellationToken)">
+            <summary>
+            Processes and modifies data for a specified target asynchronously. For more details see <see cref="M:Celeste.Mod.Procedurline.IDataProcessor`3.ProcessData(`0,Celeste.Mod.Procedurline.DataScopeKey,`1,`2@)" />.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.DelegateDataProcessor`3">
+            <summary>
+            Implements an <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3">
+            <summary>
+            Implements an <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which maintains an ordered collection of child data processors which are invoked in a specified order
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CompositeDataProcessor`3.AddProcessor(System.Int32,Celeste.Mod.Procedurline.IDataProcessor{`0,`1,`2})">
+            <summary>
+            Adds a new processor to the composite processor. Duplicates are allowed.
+            </summary>
+            <returns>
+            Returns a <see cref="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3.ProcessorHandle" /> which can be used to remove the processor from the composite
+            </returns>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.DataScope">
+            <summary>
+            Represents a data scope. Data scopes are collection of objects who share one or more properties.
+            Objects are represented through "scope keys". Scope keys represent a specific configuration of scopes which are "registered" on the key.
+            When a scope is invalidated, all registered scope keys get invalidated as well.
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScopeKey" />
+            <seealso cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScope.RegisterKey(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Register a key on the scope. This results in the key's validity becoming tied to the scope's validity.
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+            <returns>
+            Returns <c>false</c> if the key was already registered/couldn't be registered
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScope.Invalidate">
+            <summary>
+            Invalidates the scope. All registered keys will get invalidated
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+            <seealso cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScope.InvalidateRegistrars">
+            <summary>
+            Invalidates the registrars of all registered keys.
+            This function should be called anytime that targets belonging to this scope could be assigned a different set of scopes if they were to get re-registered (usually through an <see cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" />).
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+            <seealso cref="M:Celeste.Mod.Procedurline.DataScopeKey.InvalidateRegistrars" />
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.DataScopeKey">
+            <summary>
+            Represents a data scope key. For details, see <c cref="T:Celeste.Mod.Procedurline.DataScope">DataScope</c>
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScope" />
+        </member>
+        <member name="F:Celeste.Mod.Procedurline.DataScopeKey.LOCK">
+            <summary>
+            When locking multiple keys, lock the one with the lower ID first
+            </summary>
+        </member>
+        <member name="F:Celeste.Mod.Procedurline.DataScopeKey.VALIDITY_LOCK">
+            <summary>
+            When holding this lock, IsValid cannot change.
+            You must also be holding <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.LOCK" /> before locking/using this lock, or undefined behaviour will occur.
+            <b>DO NOT CALL ANY NON-TRIVIAL METHODS WHILE HOLDING THIS LOCK</b> 
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Dispose">
+            <summary>
+            Disposes the scope key. This effectively performs a call to <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> before destryoing the key.
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Copy(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Copy the scope key
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.RegisterScope(Celeste.Mod.Procedurline.DataScope)">
+            <summary>
+            Called when this key is registered on a new scope
+            Both the scope and key lock are held, <b>so you CAN NOT call functions like <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" /></b>
+            </summary>
+            <returns>
+            <c>false</c> if the key couldn't be registered
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate">
+            <summary>
+            Invalidates the scope key. Invalidated scope keys can't be registered on new scopes or take ownership of objects until they're reset using Reset().
+            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />.
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.InvalidateRegistrars">
+            <summary>
+            Invalidates the scope key's registrars, which does nothing other than invoking <see cref="E:Celeste.Mod.Procedurline.DataScopeKey.OnInvalidateRegistrars" />.
+            This event should be used to notify the component responsible for registring the key's scopes (usually through an <see cref="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1" />) that their target could potentially be assigned different scopes after the invalidation.
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Reset">
+            <summary>
+            Resets the scope key. This removes it from all scopes it's registered on and resets its validity, so that it can be used again in the future.
+            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, except itself, if the key owns itself.
+            <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.IsRegistered(Celeste.Mod.Procedurline.DataScope)">
+            <returns>
+            Returns <c>true</c> if the key is registered on the specified scope
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)">
+            <returns>
+            Takes ownership of the given disposable objects. Owned objects are disposed when the key is invalidated or reset using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" />.
+            If the key is already invalidated, the object is immediately disposed.
+            If the object given is the key itself, then the key will automatically dispose itself when it's invalidated.
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.GetOwnedObject``1">
+            <returns>
+            Gets the owned object of the specified type, or <c>null</c> if there is no owned object of that type.
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.GetScopeListString(System.String)">
+            <summary>
+            Returns a string list of the names of all scopes the key belongs to, seperated by <paramref name="delim" /> 
+            </summary>
+        </member>
+        <member name="E:Celeste.Mod.Procedurline.DataScopeKey.OnInvalidate">
+            <summary>
+            Invoked by <seealso cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> when the key is invalidated before disposing owned objects, with <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.LOCK" /> held.
+            </summary>
+        </member>
+        <member name="E:Celeste.Mod.Procedurline.DataScopeKey.OnInvalidateRegistrars">
+            <summary>
+            Invoked by <seealso cref="M:Celeste.Mod.Procedurline.DataScopeKey.InvalidateRegistrars" /> when the key's registrars are invalidated, with <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.LOCK" /> held.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1">
+            <summary>
+            Represents something capable of registering appropiate scopes of a target on a given key
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScope" />
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScopeKey" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IDataScopeRegistrar`1.RegisterScopes(`0,Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Register all scopes the target belongs to on the key
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.VoidBox">
+            <summary>
+            An empty struct used to NOP out generic type arguments.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})">
+            <summary>
+            Virtualizes the given method.
+            The method must be hiding a non-virtual method in the base class and have an empty/NOP body.
+            After being patched, child classes overriding the class can call the original method by calling the base method, and their virtual method is called instead of the hidden method.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteUtils.Clone(Monocle.Sprite)">
+            <summary>
+            Clones the sprite
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteUtils.CloneInto(Monocle.Sprite,Monocle.Sprite)">
+            <summary>
+            Clones the sprite into the given target sprite
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerHairColorData">
+            <summary>
+            Holds the player's hair colors.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerHairColorData.ApplyMatrix(Microsoft.Xna.Framework.Matrix)">
+            <summary>
+            Applies the given color matrix to all hair colors.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerHairColorData.RemoveAlpha">
+            <summary>
+            Returns a <see cref="T:Celeste.Mod.Procedurline.PlayerHairColorData" /> instance with all alpha components removed.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerHairSettingsData">
+            <summary>
+            Holds the player's hair settings.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerHairNodeData">
+            <summary>
+            Holds a player hair node's data.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerManager">
+            <summary>
+            Manages player related processors like hair color processors.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerManager.GetHairNodeData(Celeste.PlayerHair,System.Int32)">
+            <summary>
+            Returns the <see cref="T:Celeste.Mod.Procedurline.PlayerHairNodeData" /> for a given node index.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData">
+            <summary>
+            Holds additional per-frame player metadata.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation">
+            <summary>
+            A subclass of <see cref="T:Monocle.Sprite.Animation" /> which also holds <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData" />.
+            Procedurline replaces all animation references in <see cref="T:Celeste.PlayerSprite" />s with instances of <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation" />, which allow sprite animation processor to change this metadata as well.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationData">
+            <summary>
+            A subclass of <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" /> which also holds <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData" />.
+            </summary>
+        </member>
+        <member name="F:Celeste.Mod.Procedurline.PlayerTextureUtils.MAX_FACE_Y">
+            <summary>
+            The maximum Y coordinate a face pixel can appear on
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerTextureUtils.MergePlayerComponents(Celeste.Mod.Procedurline.TexturePartitioning)">
+            <summary>
+            Merge all partitions which belong to the same component of the player's sprite.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerTextureUtils.IsFaceComponent(Celeste.Mod.Procedurline.TexturePartitioning,System.Int32)">
+            <summary>
+            Checks if the given partiton ID belongs to the player's face component.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ProcessedSprite">
+            <summary>
+            Represents a processed sprite. Processed sprite objects are created and bound to each Monocle sprite by the <see cref="T:Celeste.Mod.Procedurline.SpriteManager" />, which also allows access to them.
+            Processed sprites are responsible for integrating the backend sprite animation processing logic with the "frontend" Monocle sprite objects, by handling animation hooks, animation invalidation, async processing, etc.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.GetAnimation(System.String)">
+            <summary>
+            Gets the specific processed animation for the sprite.
+            If the processed animation isn't cached, starts an asynchronous processing task, and the original animation is returned in the mean time.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ReloadAnimation(System.String)">
+            <summary>
+            Reloads the sprite's current animation, if its ID is the one specified.
+            If the animation ID is <c>null</c>, then reload no matter the current animation.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ResetScopedCache">
+            <summary>
+            Resets the sprite's scoped cache reference and obtains a new one.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteAnimationCache">
+            <summary>
+            Implements an <see cref="T:Celeste.Mod.Procedurline.AsyncDataProcessorCache`3" /> which caches sprite animations.
+            An extra subclass is required because sprites require the use of <see cref="T:Celeste.Mod.Procedurline.SpriteScopeKey" /> instead of the default <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" />.
+            It also takes care of creating sprite scopes per scoped cache wich can be used to store the processed frame textures.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteAnimationData">
+            <summary>
+            Contains and wraps sprite animation data in a more accesible way
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteAnimationData.AnimationFrame">
+            <summary>
+            Contains the data required to describe a single frame of a sprite animation
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteAnimationData.Clone">
+            <summary>
+            Clones the sprite animation data
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteAnimationData.ApplyFrameProcessor(Celeste.Mod.Procedurline.IDataProcessor{Monocle.Sprite,System.Int32,Celeste.Mod.Procedurline.SpriteAnimationData.AnimationFrame},Monocle.Sprite,Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Applies a data processor to all frames of the animation
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteColorMatrixProcessor">
+            <summary>
+            A simple implementation of a sprite animation processor which applies a color matrix to all pixels.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteManager">
+            <summary>
+            Manages sprites and their properties (like animations).
+            Allows for users to add data processors which can transparently modify sprite animations before rendering.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.GetAnimationData(Monocle.Sprite.Animation,System.Threading.CancellationToken)">
+            <summary>
+            Gets the <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" /> for the specified animation.
+            The resulting animation data object will contain newly created <see cref="T:Celeste.Mod.Procedurline.TextureData" /> objects, so it's required to call <see cref="M:Celeste.Mod.Procedurline.SpriteAnimationData.Dispose" /> once you finished using it.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.CreateAnimation(System.String,Celeste.Mod.Procedurline.TextureScope,Celeste.Mod.Procedurline.SpriteAnimationData,System.Threading.CancellationToken,Celeste.Mod.Procedurline.AsyncRef{Celeste.Mod.Procedurline.TextureHandle})">
+            <summary>
+            Create a new animation from the given <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" />
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.GetSpriteID(Monocle.Sprite)">
+            <summary>
+            Returns the sprite's unique identifier.
+            </summary>
+            <returns>
+            <c>null</c> if the sprite doesn't have an unique ID
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.CreateProcessedSprite(Monocle.Sprite)">
+            <summary>
+            Creates a <see cref="T:Celeste.Mod.Procedurline.ProcessedSprite" /> for the sprite. You are resposible for properly disposing it using <see cref="M:Celeste.Mod.Procedurline.ProcessedSprite.Dispose" /> once the sprite's not used anymore.
+            This method should be used which Procedurline wouldn't pick up as active by itself.
+            </summary>
+            <returns>
+            <c>null</c> if the sprite can't have / already has an associated processed sprite
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.GetProcessedSprite(Monocle.Sprite)">
+            <summary>
+            Returns the sprite's <see cref="T:Celeste.Mod.Procedurline.ProcessedSprite" /> wrapper, which is responsible for all sprite modifications/processing.
+            </summary>
+            <returns>
+            <c>null</c> if the sprite doesn't have an associated processed sprite
+            </returns>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteScopeKey">
+            <summary>
+            A <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" /> which also keeps track of sprite IDs.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.StaticSprite">
+            <summary>
+            Represents statically processed sprites.
+            Most of the actual logic is in <see cref="T:Celeste.Mod.Procedurline.StaticSpriteAnimation" />, but this class is used to keep common data for all animations and provides the static sprite constructor.
+            </summary>
+        </member>
+        <member name="F:Celeste.Mod.Procedurline.StaticSprite.Processor">
+            <summary>
+            External sources invoking this processor <b>MUST</b> register the $GLOBAL and $STATIC scopes themselves.
+            </summary> 
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.StaticSpriteAnimation">
+            <summary>
+            Represents statically processed sprite animations.
+            Statically processed sprite animations are used by e.g. custom boosters, but because of Procedurline's design still have to run asynchroniously.
+            So this class is used to keep track of the processing task and potential scope invalidations.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.StaticSpriteAnimation.GetProcessorTask">
+            <summary>
+            Returns the task processing the static animation, or if none is running, starts it.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.StaticSpriteAnimation.GetProcessorTask(System.Boolean@)">
+            <summary>
+            Returns the task processing the static animation, or if none is running, starts it.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureData">
+            <summary>
+            Contains and wraps texture data in a more accesible way
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.Clone">
+            <summary>
+            Clones the texture data
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.Copy(Celeste.Mod.Procedurline.TextureData,System.Nullable{Microsoft.Xna.Framework.Rectangle},System.Nullable{Microsoft.Xna.Framework.Rectangle})">
+            <summary>
+            Copies data from this texture into a different texture data buffer
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.DownloadData(Microsoft.Xna.Framework.Graphics.Texture2D,System.Nullable{Microsoft.Xna.Framework.Rectangle})">
+            <summary>
+            Download data from the specified (sub)texture
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.UploadData(Microsoft.Xna.Framework.Graphics.Texture2D,System.Nullable{Microsoft.Xna.Framework.Rectangle})">
+            <summary>
+            Upload data to the specified (sub)texture
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.EnumeratePixels">
+            <summary>
+            Enumerates over all pixels in the texture.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.IsInBounds(System.Int32,System.Int32)">
+            <summary>
+            Checks if the given pixel coordinates are in the bounds of the texture.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureData.IsInBounds(Microsoft.Xna.Framework.Point)">
+            <summary>
+            Checks if the given pixel coordinates are in the bounds of the texture.
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TextureData.Item(System.Int32,System.Int32)">
+            <summary>
+            WARNING: No bounds checks are performed! Make sure you provide valid coordinates!
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TextureData.Item(Microsoft.Xna.Framework.Point)">
+            <summary>
+            WARNING: No bounds checks are performed! Make sure you provide valid coordinates!
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TextureData.RawData">
+            <summary>
+            Returns the raw data of the texture data buffer
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureHandle">
+            <summary>
+            Provides a managed handle for textures
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHandle.InvalidateCache">
+            <summary>
+            Invalidates cached texture data
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHandle.GetTextureData(System.Threading.CancellationToken)">
+            <summary>
+            Gets the texture data for the texture, downloading it if required.
+            <b>NOTE: DATA MIGHT BE CACHED, DO NOT MODIFY THE RETURNED <see cref="T:Celeste.Mod.Procedurline.TextureData" /> OBJECT!</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHandle.SetTextureData(Celeste.Mod.Procedurline.TextureData,System.Threading.CancellationToken)">
+            <summary>
+            Sets and uploads the texture data for the texture
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TextureHandle.CachedData">
+            <summary>
+            Gets the cached texture data, or null if no data is cached
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureHeap">
+            <summary>
+            Implements a simple texture heap, which can be used to merge multiple texture data buffers into one big atlas
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHeap.AddTexture(Celeste.Mod.Procedurline.TextureData)">
+            <summary>
+            Adds texture data to the heap
+            </summary>
+            <returns>
+            Returns the subrectangle of the atlas texture corresponding to the added texture
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHeap.CreateAtlasTexture">
+            <summary>
+            Creates the atlas texture
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureManager">
+            <summary>
+            Manages texture creation / lifecycle / data upload / etc.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureManager.GetHandle(Monocle.VirtualTexture)">
+            <summary>
+            Gets the <see cref="T:Celeste.Mod.Procedurline.TextureHandle" /> for a <see cref="T:Monocle.VirtualTexture" />
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureManager.DownloadData(Celeste.Mod.Procedurline.TextureHandle,Celeste.Mod.Procedurline.TextureData,System.Threading.CancellationToken)">
+            <summary>
+            Downloads the data from the given <see cref="T:Celeste.Mod.Procedurline.TextureHandle"/>'s texture into the specified <see cref="T:Celeste.Mod.Procedurline.TextureData"/> buffer.
+            <b>NOTE: It's recommended to use <see cref="M:Celeste.Mod.Procedurline.TextureHandle.GetTextureData(System.Threading.CancellationToken)"/> instead, as it caches the texture's data</b>
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureManager.UploadData(Celeste.Mod.Procedurline.TextureHandle,Celeste.Mod.Procedurline.TextureData,System.Threading.CancellationToken)">
+            <summary>
+            Uploads the data from the given <see cref="T:Celeste.Mod.Procedurline.TextureData"/> buffer into the specified <see cref="T:Celeste.Mod.Procedurline.TextureHandle"/>'s texture.
+            <b>NOTE: It's recommended to use <see cref="M:Celeste.Mod.Procedurline.TextureHandle.SetTextureData(Celeste.Mod.Procedurline.TextureData,System.Threading.CancellationToken)"/> instead, as it caches the texture's data</b>
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureOwner">
+            <summary>
+            Represents something owning one or multiple textures
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TextureOwner.NumTextures">
+            <summary>
+            Returns the number of actual textures owned by this owner
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureScope">
+            <summary>
+            Manages texture lifecycle. If a scope is disposed, all textures and sub-scopes owned by it are also disposed
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureScope.Clear">
+            <summary>
+            Clears and disposes all textures and sub-scopes owned by this scope
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TexturePartitioning">
+            <summary>
+            Contains a partitioning of a texture. All pixels in the texture belong to exactly one partition.
+            Partitions can be manually created, or by e.g. <see cref="M:Celeste.Mod.Procedurline.TexturePartitioning.CreateColorComponentPartitions(Celeste.Mod.Procedurline.TextureData,System.Int32)" />.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.CreateColorComponentPartitions(Celeste.Mod.Procedurline.TextureData,System.Int32)">
+            <summary>
+            Creates a partitioning of a texture based on color components. A color component consists of adjacent pixels with the same or similar colors.
+            </summary>
+            <param name="maxColDst">
+            The maximum distance two colors can be to be considered "similar". Distance is defined as the Euclidean distance between the color vectors.
+            </param>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.AddPartition">
+            <summary>
+            Adds a new partition, and returns its ID.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.GetPartitionPixels(System.Int32)">
+            <summary>
+            Returns an enumerable over all pixels in the given partition.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.FindPartition(System.Func{System.Int32,Microsoft.Xna.Framework.Point,System.Boolean})">
+            <summary>
+            Finds the partition which fullfills the given condition, or <c>-1</c> if no such partition exists.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.FindPartitions(System.Func{System.Int32,Microsoft.Xna.Framework.Point,System.Boolean})">
+            <summary>
+            Finds the partitions which fullfill the given condition.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.ExchangePartitionID(System.Int32,System.Int32)">
+            <summary>
+            Exchanges a partition's ID. This replaces the ID of all pixels belonging to the partition with the given new ID.
+            If the ID already belongs to a partition, this effectively merges the two.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TexturePartitioning.MergeTouchingParitions(System.Func{System.Int32,System.Int32,Microsoft.Xna.Framework.Point,Microsoft.Xna.Framework.Point,System.Boolean})">
+            <summary>
+            Merge touching paritions fulfilling the the condition.
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TexturePartitioning.Item(System.Int32,System.Int32)">
+            <summary>
+            Gets or sets the pixel's partition ID.
+            </summary>
+        </member>
+        <member name="P:Celeste.Mod.Procedurline.TexturePartitioning.Item(Microsoft.Xna.Framework.Point)">
+            <summary>
+            Gets or sets the pixel's partition ID.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureUtils.ApplyColorMatrix(Celeste.Mod.Procedurline.TextureData,Microsoft.Xna.Framework.Matrix)">
+            <summary>
+            Applies the given color matrix to all pixels in the texture.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureUtils.ApplyColorMatrix(Celeste.Mod.Procedurline.TextureData,Microsoft.Xna.Framework.Matrix,System.Single,System.Single)">
+            <summary>
+            Applies the given color matrix to all pixels in the texture whose HSV saturation and value is above a certain threshold.
+            </summary>
+        </member>
+    </members>
+</doc>

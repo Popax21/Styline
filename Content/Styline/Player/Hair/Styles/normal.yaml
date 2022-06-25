@@ -1,0 +1,8 @@
+NodeScaleMultipliers:
+  - {X: 1, Y: 1}
+  - {X: 1, Y: 1}
+  - {X: 1, Y: 1}
+  - {X: 1, Y: 1}
+StepInFacingPerSegmentMultiplier: 1
+StepYSinePerSegmentMultiplier: 1
+StepApproachMultiplier: 1

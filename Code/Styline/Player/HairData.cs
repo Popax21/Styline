@@ -7,7 +7,7 @@ namespace Celeste.Mod.Styline {
     }
 
     public struct HairAccessoryData {
-        public Vector2 HairOffset;
+        public Vector2[] HairOffsets;
         public string Texture;
     }
 }

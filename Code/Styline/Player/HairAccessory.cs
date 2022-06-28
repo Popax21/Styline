@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
@@ -60,11 +59,14 @@ namespace Celeste.Mod.Styline {
             }
             if(texs == null) return;
 
-            if(hair.Sprite.HasHair) {
+            if(hair.Sprite.HasHair && hair.Sprite.HairFrame < AccessoryData.HairOffsets.Length) {
                 //Draw accessory
+                Vector2 off = AccessoryData.HairOffsets[hair.Sprite.HairFrame];
+                if(!float.IsFinite(off.X) || !float.IsFinite(off.Y)) return;
+
                 int idx = hair.Sprite.HairFrame;
-                if(idx >= texs.Length) idx = texs.Length;
-                texs[hair.Sprite.HairFrame].Draw(hair.Nodes[0], new Vector2(5, 5), AccessoryColor, hair.GetHairScale(0));
+                if(idx >= texs.Length) idx = texs.Length-1;
+                texs[idx].Draw(hair.Nodes[0] + off * hair.GetHairScale(0), Vector2.Zero, AccessoryColor, hair.GetHairScale(0));
             }
         }
     }

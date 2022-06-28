@@ -60,7 +60,8 @@ namespace Celeste.Mod.Styline {
                 HairStyle = hairStyle;
 
                 HairAccessoryData hairAccessory = default;
-                hairAccessory.HairOffset = reader.ReadVector2();
+                hairAccessory.HairOffsets = new Vector2[reader.ReadByte()];
+                for(int i = 0; i < hairAccessory.HairOffsets.Length; i++) hairAccessory.HairOffsets[i] = reader.ReadVector2();
                 hairAccessory.Texture = reader.ReadNetString();
                 HairAccessory = hairAccessory;
                 HairAccessoryColor = reader.ReadColor();
@@ -89,7 +90,8 @@ namespace Celeste.Mod.Styline {
                 writer.Write(HairStyle.StepYSinePerSegmentMultiplier);
                 writer.Write(HairStyle.StepApproachMultiplier);
 
-                writer.Write(HairAccessory.HairOffset);
+                writer.Write((byte) HairAccessory.HairOffsets.Length);
+                foreach(Vector2? v in HairAccessory.HairOffsets) writer.Write(v.Value);
                 writer.WriteNetString(HairAccessory.Texture);
                 writer.Write(HairAccessoryColor);
 

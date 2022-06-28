@@ -19,6 +19,12 @@
             Marks this content method for virtualization using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />
             </summary>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomBooster.ProcessSprite(Monocle.Sprite)">
+            <summary>
+            Processes the booster's sprite. By default this recolors it using the color passed to the constructor
+            The default implementation caches sprites based on color, custom implementations should implement a cache themselves
+            </summary>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.CustomBooster.OnPlayerEnter(Celeste.Player)">
             <summary>
             Called when the player enters your booster. Return the type of boost it should give them, or <c>null</c> if no default behaviour should take place.
@@ -32,6 +38,17 @@
         <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnDeactivate">
             <summary>
             Called when your dream block gets deactivated. Return false if you don't want to deactivate it.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomRefill.ProcessSprite(Monocle.Sprite)">
+            <summary>
+            Processes the refill's sprite. By default this recolors it using the color passed to the constructor
+            The default implementation caches sprites based on color and refill type, custom implementations should implement a cache themselves
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomRefill.Respawn(System.Single)">
+            <summary>
+            Respawns the refill, if it's broken.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.CustomRefill.OnTouch(Celeste.Player)">
@@ -167,6 +184,15 @@
             <c>null</c> if the target shouldn't have any associated scoped data.
             </returns>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.GetScopedData(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Retrieves the associated scoped data for the given scope key.
+            If there is no scoped data chached for the key, no new data is created, as the key alone doesn't hold enough information to create it.
+            </summary>
+            <returns>
+            <c>null</c> if the key doesn't have any cached data.
+            </returns>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.DataCache`2.CreateKey(`0)">
             <summary>
             Creates a new key for use with the scope registrar.
@@ -226,21 +252,31 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.DelegateDataProcessor`3">
             <summary>
-            Implements an <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given
+            Implements an <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given
             </summary>
         </member>
-        <member name="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3">
+        <member name="T:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3">
             <summary>
-            Implements an <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which maintains an ordered collection of child data processors which are invoked in a specified order
+            Implements functionality shared between <seealso cref="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3" /> and <seealso cref="T:Celeste.Mod.Procedurline.CompositeAsyncDataProcessor`3" />
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.CompositeDataProcessor`3.AddProcessor(System.Int32,Celeste.Mod.Procedurline.IDataProcessor{`0,`1,`2})">
+        <member name="M:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3.AddProcessor(System.Int32,`1)">
             <summary>
             Adds a new processor to the composite processor. Duplicates are allowed.
             </summary>
             <returns>
-            Returns a <see cref="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3.ProcessorHandle" /> which can be used to remove the processor from the composite
+            Returns a <see cref="T:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3.ProcessorHandle" /> which can be used to remove the processor from the composite
             </returns>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3">
+            <summary>
+            Implements an <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which maintains an ordered collection of child data processors which are invoked in a specified order
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.CompositeAsyncDataProcessor`3">
+            <summary>
+            Implements an <see cref="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3" /> which maintains an ordered collection of child data processors which are invoked in a specified order
+            </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.DataScope">
             <summary>
@@ -484,9 +520,9 @@
             If the animation ID is <c>null</c>, then reload no matter the current animation.
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ResetScopedCache">
+        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ResetCache">
             <summary>
-            Resets the sprite's scoped cache reference and obtains a new one.
+            Resets the sprite's own cache of processor tasks.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.SpriteAnimationCache">

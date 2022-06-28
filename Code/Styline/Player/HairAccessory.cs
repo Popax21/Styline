@@ -60,8 +60,10 @@ namespace Celeste.Mod.Styline {
             }
             if(texs == null) return;
 
-            if(hair.Sprite.HasHair && hair.Sprite.HairFrame < texs.Length) {
+            if(hair.Sprite.HasHair) {
                 //Draw accessory
+                int idx = hair.Sprite.HairFrame;
+                if(idx >= texs.Length) idx = texs.Length;
                 texs[hair.Sprite.HairFrame].Draw(hair.Nodes[0], new Vector2(5, 5), AccessoryColor, hair.GetHairScale(0));
             }
         }

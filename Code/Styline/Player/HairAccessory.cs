@@ -2,13 +2,21 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 
+using MonoMod.ModInterop;
 using Monocle;
 
 namespace Celeste.Mod.Styline {
     public class HairAccessory : IDisposable {
         private static readonly LinkedList<HairAccessory> accessoryList = new LinkedList<HairAccessory>();
 
-        public static void Load() => On.Celeste.PlayerHair.Render += HairRenderHook;
+        [ModImportName("GravityHelper.IsActorInverted")]
+        public static Func<Actor, bool> GH_IsActorInverted; 
+
+        public static void Load() {
+            typeof(HairAccessory).ModInterop();
+            On.Celeste.PlayerHair.Render += HairRenderHook;
+        }
+
         public static void Unload() => On.Celeste.PlayerHair.Render -= HairRenderHook;
 
         private static void HairRenderHook(On.Celeste.PlayerHair.orig_Render orig, PlayerHair hair) {
@@ -64,9 +72,12 @@ namespace Celeste.Mod.Styline {
                 Vector2 off = AccessoryData.HairOffsets[hair.Sprite.HairFrame];
                 if(!float.IsFinite(off.X) || !float.IsFinite(off.Y)) return;
 
+                Vector2 scale = hair.GetHairScale(0);
+                if(hair.Entity is Actor act && (GH_IsActorInverted?.Invoke(act) ?? false)) scale.Y *= -1;
+
                 int idx = hair.Sprite.HairFrame;
                 if(idx >= texs.Length) idx = texs.Length-1;
-                texs[idx].Draw(hair.Nodes[0] + off * hair.GetHairScale(0), Vector2.Zero, AccessoryColor, hair.GetHairScale(0));
+                texs[idx].Draw(hair.Nodes[0] + off * scale, Vector2.Zero, AccessoryColor, scale);
             }
         }
     }

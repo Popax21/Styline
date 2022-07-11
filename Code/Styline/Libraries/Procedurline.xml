@@ -92,6 +92,11 @@
             Returns a new task, which will complete either when the original task does or the given token is cancelled
             </summary>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.AsyncUtils.WrapAsync``3(Celeste.Mod.Procedurline.IDataProcessor{``0,``1,``2})">
+            <summary>
+            Returns an <see cref="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3" /> wrapping this <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />
+            </summary>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.ColorUtils.RemoveAlpha(Microsoft.Xna.Framework.Color)">
             <summary>
             Removes the alpha component from the color by setting it to 255
@@ -255,6 +260,11 @@
             Implements an <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.AsyncProcessorWrapper`3">
+            <summary>
+            Implements an <see cref="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3" /> wrapping a synchronous <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3">
             <summary>
             Implements functionality shared between <seealso cref="T:Celeste.Mod.Procedurline.CompositeDataProcessor`3" /> and <seealso cref="T:Celeste.Mod.Procedurline.CompositeAsyncDataProcessor`3" />
@@ -382,11 +392,6 @@
             If the object given is the key itself, then the key will automatically dispose itself when it's invalidated.
             </returns>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.DataScopeKey.GetOwnedObject``1">
-            <returns>
-            Gets the owned object of the specified type, or <c>null</c> if there is no owned object of that type.
-            </returns>
-        </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.GetScopeListString(System.String)">
             <summary>
             Returns a string list of the names of all scopes the key belongs to, seperated by <paramref name="delim" /> 
@@ -511,7 +516,7 @@
         <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.GetAnimation(System.String)">
             <summary>
             Gets the specific processed animation for the sprite.
-            If the processed animation isn't cached, starts an asynchronous processing task, and the original animation is returned in the mean time.
+            If the processed animation isn't cached, this starts an asynchronous processing task, and the original animation is returned.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ReloadAnimation(System.String)">
@@ -552,6 +557,11 @@
             Applies a data processor to all frames of the animation
             </summary>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteAnimationData.ApplyFrameProcessor(Celeste.Mod.Procedurline.IAsyncDataProcessor{Monocle.Sprite,System.Int32,Celeste.Mod.Procedurline.SpriteAnimationData.AnimationFrame},Monocle.Sprite,Celeste.Mod.Procedurline.DataScopeKey,System.Threading.CancellationToken)">
+            <summary>
+            Applies a data processor to all frames of the animation
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.SpriteColorMatrixProcessor">
             <summary>
             A simple implementation of a sprite animation processor which applies a color matrix to all pixels.
@@ -574,6 +584,11 @@
             Create a new animation from the given <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" />
             </summary>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.ProcessAnimation(Monocle.Sprite,System.String,Monocle.Sprite.Animation,System.Threading.CancellationToken)">
+            <summary>
+            Processes the given animation data. Note that you should almost never be calling this yourself, instead use <see cref="M:Celeste.Mod.Procedurline.SpriteManager.GetProcessedAnimation(Monocle.Sprite,System.String)" />
+            </summary>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.SpriteManager.GetSpriteID(Monocle.Sprite)">
             <summary>
             Returns the sprite's unique identifier.
@@ -585,7 +600,7 @@
         <member name="M:Celeste.Mod.Procedurline.SpriteManager.CreateProcessedSprite(Monocle.Sprite)">
             <summary>
             Creates a <see cref="T:Celeste.Mod.Procedurline.ProcessedSprite" /> for the sprite. You are resposible for properly disposing it using <see cref="M:Celeste.Mod.Procedurline.ProcessedSprite.Dispose" /> once the sprite's not used anymore.
-            This method should be used which Procedurline wouldn't pick up as active by itself.
+            This method should be used for sprites which Procedurline wouldn't pick up as active by itself.
             </summary>
             <returns>
             <c>null</c> if the sprite can't have / already has an associated processed sprite
@@ -598,6 +613,17 @@
             <returns>
             <c>null</c> if the sprite doesn't have an associated processed sprite
             </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.SpriteManager.GetProcessedAnimation(Monocle.Sprite,System.String)">
+            <summary>
+            Gets the dynamically processed version of a sprite's animation, or the original animation if it hasn't been processed yet. This simply proxies to <see cref="M:Celeste.Mod.Procedurline.ProcessedSprite.GetAnimation(System.String)" />
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.SpriteOverlayProcessor">
+            <summary>
+            A simple implementation of a sprite animation processor which overlays a given texture or animation over all frames
+            <b>WARNING:</b> When overlaying another animation, all of its render parameters are ignored, and instead its raw pixel data is copied!
+            </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.SpriteScopeKey">
             <summary>

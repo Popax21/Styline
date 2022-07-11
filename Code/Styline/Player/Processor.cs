@@ -9,7 +9,7 @@ namespace Celeste.Mod.Styline {
         public readonly Func<Entity, bool> TargetSelector;
         public readonly bool ScaleHairNodes;
 
-        private readonly CompositeDataProcessor<Sprite, string, SpriteAnimationData>.ProcessorHandle animProcHandle;
+        private readonly CompositeAsyncDataProcessor<Sprite, string, SpriteAnimationData>.ProcessorHandle animProcHandle;
         private readonly CompositeDataProcessor<Player, VoidBox, PlayerHairColorData>.ProcessorHandle hairColorProcHandle;
         private readonly CompositeDataProcessor<Player, VoidBox, PlayerHairSettingsData>.ProcessorHandle hairSettingsProcHandle;
         private readonly CompositeDataProcessor<PlayerHair, int, PlayerHairNodeData>.ProcessorHandle hairNodeProcHandle;
@@ -24,7 +24,7 @@ namespace Celeste.Mod.Styline {
             ScaleHairNodes = scaleHairNodes;
 
             //Add processors
-            animProcHandle = ProcedurlineModule.SpriteManager.AnimationProcessor.AddProcessor(0, this);
+            animProcHandle = ProcedurlineModule.SpriteManager.AnimationProcessor.AddProcessor(0, this.WrapAsync<Sprite, string, SpriteAnimationData>());
             hairColorProcHandle = ProcedurlineModule.PlayerManager.HairColorProcessor.AddProcessor(0, this);
             hairSettingsProcHandle = ProcedurlineModule.PlayerManager.HairSettingsProcessor.AddProcessor(0, this);
             hairNodeProcHandle = ProcedurlineModule.PlayerManager.HairNodeProcessor.AddProcessor(0, this);

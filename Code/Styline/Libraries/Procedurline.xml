@@ -4,6 +4,16 @@
         <name>Procedurline</name>
     </assembly>
     <members>
+        <member name="T:Celeste.Mod.Procedurline.ContentInitAttribute">
+            <summary>
+            Marks this method as a content initializer to call when loading the mod.
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ContentUninitAttribute">
+            <summary>
+            Marks this method as a content uninitializer to call when unloading the mod.
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.ContentHookAttribute">
             <summary>
             Marks this method as a hook to apply to a content method.
@@ -16,7 +26,17 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.ContentVirtualizeAttribute">
             <summary>
-            Marks this content method for virtualization using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />
+            Marks this content method for virtualization using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Boolean,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ContentFieldProxyAttribute">
+            <summary>
+            Marks this property as a proxy for a content field using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.PatchFieldProxy(System.Reflection.PropertyInfo,System.Reflection.FieldInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.ContentPatchSFXAttribute">
+            <summary>
+            Marks this property as a custom SFX to replace the vanilla one in a given content method using <see cref="M:Celeste.Mod.Procedurline.PatchUtils.PatchSFX(System.Reflection.MethodInfo,System.Reflection.PropertyInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})" />. Can be applied multiple times.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.CustomBooster.ProcessSprite(Monocle.Sprite)">
@@ -25,19 +45,60 @@
             The default implementation caches sprites based on color, custom implementations should implement a cache themselves
             </summary>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomBooster.MakePlayerEnter(Celeste.Player,Celeste.Mod.Procedurline.CustomBooster.BoostType,System.Nullable{System.Single})">
+            <summary>
+            Make the player enter the booster.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomBooster.MakePlayerExit(Celeste.Player,System.Int32)">
+            <summary>
+            Make the player exit the booster.
+            </summary>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.CustomBooster.OnPlayerEnter(Celeste.Player)">
             <summary>
-            Called when the player enters your booster. Return the type of boost it should give them, or <c>null</c> if no default behaviour should take place.
+            Called when the player enters your booster.
+            </summary>
+            <returns>
+            The type of boost it should give them, or <c>null</c> if no default behaviour should take place.
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.GetParticleData(System.Object)">
+            <summary>
+            Gets a <c>DreamParticle</c>'s <see cref="T:Celeste.Mod.Procedurline.CustomDreamBlock.ParticleData" />
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnActivate">
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.FromParticleData(Celeste.Mod.Procedurline.CustomDreamBlock.ParticleData)">
             <summary>
-            Called when your dream block gets activated. Return false if you don't want to activate it.
+            Creates a <c>DreamParticle</c> from <see cref="T:Celeste.Mod.Procedurline.CustomDreamBlock.ParticleData" />
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnDeactivate">
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.CreateParticles">
             <summary>
-            Called when your dream block gets deactivated. Return false if you don't want to deactivate it.
+            Creates particles for the dream block. By default, this matches the vanilla behaviour.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnEnter(Celeste.Player,Celeste.DreamBlock)">
+            <summary>
+            Called when the player enters the dream block.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnExit(Celeste.Player,Celeste.DreamBlock)">
+            <summary>
+            Called when the player exits the dream block.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.OnCollideSolid(Celeste.Player)">
+            <summary>
+            Called when the player hits a solid while in the dream block.
+            </summary>
+            <returns>
+            <c>true</c> if the player should bounce of the solid, <c>false</c> if they should die (even if they're invincible)
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.CustomDreamBlock.UpdatePlayer(Celeste.Player)">
+            <summary>
+            Called to run the player's update logic while in the dream block. By default, this executes vanilla movement code.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.CustomRefill.ProcessSprite(Monocle.Sprite)">
@@ -46,15 +107,18 @@
             The default implementation caches sprites based on color and refill type, custom implementations should implement a cache themselves
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.CustomRefill.Respawn(System.Single)">
+        <member name="M:Celeste.Mod.Procedurline.CustomRefill.Break(Celeste.Player,System.Nullable{System.Single})">
             <summary>
-            Respawns the refill, if it's broken.
+            Breaks the refill.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.CustomRefill.OnTouch(Celeste.Player)">
             <summary>
-            Called when the player touches your refill. Return <c>true</c> if it should break, or <c>false</c> otherwise.
+            Called when the player touches your refill.
             </summary>
+            <returns>
+            <c>true</c> if the default break behaviour should occur, or <c>false</c> otherwise.
+            </returns>
         </member>
         <member name="T:Celeste.Mod.Procedurline.GlobalManager">
             <summary>
@@ -189,6 +253,11 @@
             <c>null</c> if the target shouldn't have any associated scoped data.
             </returns>
         </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.Contains(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Checks if the cache has cached data for the given key
+            </summary>
+        </member>
         <member name="M:Celeste.Mod.Procedurline.DataCache`2.GetScopedData(Celeste.Mod.Procedurline.DataScopeKey)">
             <summary>
             Retrieves the associated scoped data for the given scope key.
@@ -196,6 +265,14 @@
             </summary>
             <returns>
             <c>null</c> if the key doesn't have any cached data.
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.DataCache`2.Invalidate(Celeste.Mod.Procedurline.DataScopeKey)">
+            <summary>
+            Invalidates just the specified key's scoped data in the cache. Invokes <see cref="E:Celeste.Mod.Procedurline.DataCache`2.OnInvalidateKey"/> if cached data was invalidated.
+            </summary>
+            <returns>
+            <c>true</c> if the cache contained cached data for the given key
             </returns>
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataCache`2.CreateKey(`0)">
@@ -246,7 +323,7 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3">
             <summary>
-            Same as <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />, but async
+            Same as <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />, but asynchronous
             </summary>
             <seealso cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" />>
         </member>
@@ -257,7 +334,7 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.DelegateDataProcessor`3">
             <summary>
-            Implements an <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given
+            Implements an <see cref="T:Celeste.Mod.Procedurline.IDataProcessor`3" /> which simply invokes the delegates it's given.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.AsyncProcessorWrapper`3">
@@ -272,7 +349,7 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3.AddProcessor(System.Int32,`1)">
             <summary>
-            Adds a new processor to the composite processor. Duplicates are allowed.
+            Adds a new processor to the composite processor. Processors are invoked in increasing order of their <paramref name="order"/> parameter. Inserting the same processor multiple times is allowed.
             </summary>
             <returns>
             Returns a <see cref="T:Celeste.Mod.Procedurline.BaseCompositeDataProcessor`3.ProcessorHandle" /> which can be used to remove the processor from the composite
@@ -286,6 +363,25 @@
         <member name="T:Celeste.Mod.Procedurline.CompositeAsyncDataProcessor`3">
             <summary>
             Implements an <see cref="T:Celeste.Mod.Procedurline.IAsyncDataProcessor`3" /> which maintains an ordered collection of child data processors which are invoked in a specified order
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.IScopedInvalidatable">
+            <summary>
+            Represents something which has validity tie to or related to one or multiple data scopes, and as such can be invalidated. This can be scoped data, scope keys, or entire data scopes themselves.
+            </summary>
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScope" />
+            <seealso cref="T:Celeste.Mod.Procedurline.DataScopeKey" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IScopedInvalidatable.Invalidate">
+            <summary>
+            Invalidates the object, reseting any cached data. Implementations must re-register all of their <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" /> (if they have any), and redo any processing they did, while also clearing any cached data, including that keyed using data scopes.
+            Invokes the <see cref="E:Celeste.Mod.Procedurline.IScopedInvalidatable.OnInvalidate" /> event.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IScopedInvalidatable.InvalidateRegistrars">
+            <summary>
+            Notifies the object of a registrar invalidation, which might cause the set of data scopes it tracks to to change. Implementations must re-register all of their <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" /> (if they have any), but advanced ones can keep their caches intact, as long as it is keyed using data scopes.
+            Invokes the <see cref="E:Celeste.Mod.Procedurline.IScopedInvalidatable.OnInvalidateRegistrars" /> event.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.DataScope">
@@ -347,13 +443,13 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Copy(Celeste.Mod.Procedurline.DataScopeKey)">
             <summary>
-            Copy the scope key
+            Copy the scope key's set of registered scopes onto a different key, resetting it in the process. If the key is invalid, the destination key will also be once the operations finishes.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.RegisterScope(Celeste.Mod.Procedurline.DataScope)">
             <summary>
-            Called when this key is registered on a new scope
-            Both the scope and key lock are held, <b>so you CAN NOT call functions like <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" /></b>
+            Called when this key is registered on a new scope.
+            Both the scope lock (<see cref="F:Celeste.Mod.Procedurline.DataScope.LOCK" />) and key lock (<see cref="F:Celeste.Mod.Procedurline.DataScopeKey.LOCK" />) are held, <b>so you CAN NOT call functions like <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" /></b>
             </summary>
             <returns>
             <c>false</c> if the key couldn't be registered
@@ -361,8 +457,8 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate">
             <summary>
-            Invalidates the scope key. Invalidated scope keys can't be registered on new scopes or take ownership of objects until they're reset using Reset().
-            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />.
+            Invalidates the scope key, invoking <see cref="E:Celeste.Mod.Procedurline.DataScopeKey.OnInvalidate" /> . Invalidated scope keys can't be registered on new scopes or take ownership of objects until they're reset using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" />.
+            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, including itself, if the key owns itself.
             <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
             </summary>
         </member>
@@ -376,7 +472,7 @@
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Reset">
             <summary>
             Resets the scope key. This removes it from all scopes it's registered on and resets its validity, so that it can be used again in the future.
-            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, except itself, if the key owns itself.
+            Also disposes all owned objects which the key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, except itself, if the key owns itself (but the key would no longer do so in the future).
             <b>NOTE: Make sure you DO NOT hold any scope locks when calling this function, otherwise deadlocks could occur!</b>
             </summary>
         </member>
@@ -387,7 +483,7 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)">
             <returns>
-            Takes ownership of the given disposable objects. Owned objects are disposed when the key is invalidated or reset using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" />.
+            Takes ownership of the given disposable object. Owned objects are disposed when the key is invalidated or reset using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> or <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Reset" />.
             If the key is already invalidated, the object is immediately disposed.
             If the object given is the key itself, then the key will automatically dispose itself when it's invalidated.
             </returns>
@@ -409,7 +505,7 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.IDataScopeRegistrar`1">
             <summary>
-            Represents something capable of registering appropiate scopes of a target on a given key
+            Represents something capable of registering the appropiate scopes of a target on a given key
             </summary>
             <seealso cref="T:Celeste.Mod.Procedurline.DataScope" />
             <seealso cref="T:Celeste.Mod.Procedurline.DataScopeKey" />
@@ -419,16 +515,47 @@
             Register all scopes the target belongs to on the key
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.MethodVirtualizerDetour">
+            <summary>
+            Implements a detour, which redirects invocations of a non-virtual base method to a virtual method contained in a child class, if the instance is of that type.
+            Optionally also redirects the virtual method's base implementation back to the non-virtual one, which allows one to retroactively make a method virtual.
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.VoidBox">
             <summary>
             An empty struct used to NOP out generic type arguments.
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})">
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.GetFieldRecursive(System.Type,System.String,System.Reflection.BindingFlags)">
+            <summary>
+            Finds a field in this type or any base types recursively.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.GetPropertyRecursive(System.Type,System.String,System.Reflection.BindingFlags)">
+            <summary>
+            Finds a property in this type or any base types recursively.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.GetMethodRecursive(System.Type,System.String,System.Reflection.BindingFlags,System.Type[])">
+            <summary>
+            Finds a method in this type or any base types recursively.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.Virtualize(System.Reflection.MethodInfo,System.Boolean,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})">
             <summary>
             Virtualizes the given method.
-            The method must be hiding a non-virtual method in the base class and have an empty/NOP body.
+            The method must be hiding a non-virtual method in the base class and have an empty/NOP body, if the base method should still be invoked.
             After being patched, child classes overriding the class can call the original method by calling the base method, and their virtual method is called instead of the hidden method.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.PatchFieldProxy(System.Reflection.PropertyInfo,System.Reflection.FieldInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})">
+            <summary>
+            Patches the property to bea field proxy. After patching, the property will proxy the given (private) field.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PatchUtils.PatchSFX(System.Reflection.MethodInfo,System.Reflection.PropertyInfo,System.Collections.Generic.IList{MonoMod.RuntimeDetour.IDetour})">
+            <summary>
+            Patches a SFX in a vanilla method, by replacing it with one given by a property at runtime. The property can be virtual, but the base implementation must return the SFX to be replaced.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.SpriteUtils.Clone(Monocle.Sprite)">
@@ -525,9 +652,9 @@
             If the animation ID is <c>null</c>, then reload no matter the current animation.
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ResetCache">
+        <member name="M:Celeste.Mod.Procedurline.ProcessedSprite.ResetCache(System.String)">
             <summary>
-            Resets the sprite's own cache of processor tasks.
+            Resets the sprite's own cache of processor tasks. If given, only resets one animation's task (note that it will still continue to process because of a design limitation).
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.SpriteAnimationCache">
@@ -646,16 +773,6 @@
             Represents statically processed sprite animations.
             Statically processed sprite animations are used by e.g. custom boosters, but because of Procedurline's design still have to run asynchroniously.
             So this class is used to keep track of the processing task and potential scope invalidations.
-            </summary>
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.StaticSpriteAnimation.GetProcessorTask">
-            <summary>
-            Returns the task processing the static animation, or if none is running, starts it.
-            </summary>
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.StaticSpriteAnimation.GetProcessorTask(System.Boolean@)">
-            <summary>
-            Returns the task processing the static animation, or if none is running, starts it.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.TextureData">

@@ -34,7 +34,7 @@ namespace Celeste.Mod.Styline {
             base.Dispose(disposing);
         }
 
-        private void AttributesChangedHandler(DataScope scope) {
+        private void AttributesChangedHandler(IScopedInvalidatable scope) {
             //Send current attributes
             IPlayerAttributes attrs = StylineModule.PlayerAttributes;
             if(clientCtx.Client != null && attrs != null) clientCtx.Client.Send(new DataPlayerAttributes(clientCtx.Client.PlayerInfo, attrs));

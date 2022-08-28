@@ -51,4 +51,4 @@ commit="$(git log -n 1 --pretty=format:%H main)"
 git commit -m "Automated update to version $1" CHANGELOG.txt
 git tag -a -m "Version $1" v$1 $commit
 git push origin main v$1
-gh release create v$1 -F $changelog --target $commit Procedurline.zip
+gh release create v$1 -F $changelog --target $commit Styline.zip

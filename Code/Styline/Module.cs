@@ -18,7 +18,7 @@ namespace Celeste.Mod.Styline {
 
         public override void Load() {
             //Create the player processor
-            playerProcessor = new PlayerProcessor("STYLINE PLAYER", e => e is Player || e is BadelineDummy);
+            playerProcessor = new PlayerProcessor("styline-player", e => e is Player || e is BadelineDummy);
             UpdatePlayerAttributes();
 
             //Add hooks

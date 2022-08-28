@@ -24,7 +24,7 @@ namespace Celeste.Mod.Styline {
             ScaleHairNodes = scaleHairNodes;
 
             //Add processors
-            animProcHandle = ProcedurlineModule.SpriteManager.AnimationProcessor.AddProcessor(0, this.WrapAsync<Sprite, string, SpriteAnimationData>());
+            animProcHandle = ProcedurlineModule.SpriteManager.DynamicAnimationProcessor.AddProcessor(0, this.WrapAsync<Sprite, string, SpriteAnimationData>());
             hairColorProcHandle = ProcedurlineModule.PlayerManager.HairColorProcessor.AddProcessor(0, this);
             hairSettingsProcHandle = ProcedurlineModule.PlayerManager.HairSettingsProcessor.AddProcessor(0, this);
             hairNodeProcHandle = ProcedurlineModule.PlayerManager.HairNodeProcessor.AddProcessor(0, this);

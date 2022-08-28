@@ -62,7 +62,7 @@ namespace Celeste.Mod.Styline {
             MainThreadHelper.Do(() => {
                 //Get and update processor
                 PlayerProcessor processor = ghostProcessors.GetOrAdd(data.Player, _ => {
-                    return new PlayerProcessor($"STYLINE GHOST {data.Player.ID}", e => e is Ghost ghost && ghost.PlayerInfo == data.Player, false);
+                    return new PlayerProcessor($"styline-ghost-{data.Player.ID}", e => e is Ghost ghost && ghost.PlayerInfo == data.Player, false);
                 });
                 processor.Attributes = data;
             });

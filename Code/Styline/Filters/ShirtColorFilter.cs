@@ -33,8 +33,8 @@ namespace Celeste.Mod.Styline {
             for(int x = 0; x < data.Width; x++) {
                 for(int y = 0; y < data.Height; y++) {
                     //Replace color
-                    if(data.TextureData[x,y] == PlayerTextureUtils.SHIRT_PRIMARY_COLOR) data.TextureData[x,y] = ColorData.PrimaryColor;
-                    else if(data.TextureData[x,y] == PlayerTextureUtils.SHIRT_SECONDARY_COLOR) data.TextureData[x,y] = ColorData.SecondaryColor;
+                    if(data.TextureData[x,y] == PlayerUtils.SHIRT_PRIMARY_COLOR) data.TextureData[x,y] = ColorData.PrimaryColor;
+                    else if(data.TextureData[x,y] == PlayerUtils.SHIRT_SECONDARY_COLOR) data.TextureData[x,y] = ColorData.SecondaryColor;
                 }
             }
 

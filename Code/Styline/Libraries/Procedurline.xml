@@ -196,8 +196,8 @@
             <summary>
             Processes and modifies data for a specified target. Returns false if it it didn't modify the data.
             All data with the same key and ID MUST be processed the same way, or e.g. <see cref="T:Celeste.Mod.Procedurline.DataProcessorCache`3" /> will stop working.
-            DO NOT change your behaviour based on target attributes not encapsulated by different scopes.
-            If <paramref name="key" /> is <c>null</c>, then the above doesn't apply - your code is free to do whatever it wants to. Callers musn't cache the returned data if they don't provide a key.
+            DO NOT change your behaviour based on (target) attributes not encapsulated by different scopes.
+            If <paramref name="key" /> is <c>null</c>, then the above doesn't apply - your code is free to do whatever it wants to. Callers musn't cache the returned data if they did't register a key using <see cref="M:Celeste.Mod.Procedurline.IScopeRegistrar`1.RegisterScopes(`0,Celeste.Mod.Procedurline.DataScopeKey)" /> first.
             </summary>
             <returns>
             Returns <c>false</c> if data wasn't modified
@@ -227,16 +227,6 @@
             </summary>
             <seealso cref="T:Celeste.Mod.Procedurline.DataScopeKey" />
             <seealso cref="T:Celeste.Mod.Procedurline.IScopeRegistrar`1" />
-        </member>
-        <member name="F:Celeste.Mod.Procedurline.DataScope.DataStoreEntry">
-            <summary>
-            Holds the entry which will be added to <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" />'s <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.DataStore" /> once the scope is registered on them. This mechanism can be used to efficiently store auxiliary data together with a given scope.
-            </summary>
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.DataScope.#ctor(System.String,System.Nullable{System.Collections.DictionaryEntry})">
-            <summary>
-            If <paramref name="name" /> is <c>null</c>, the scope is a so called "anonymous scope". These scopes aren't explicitly listed in debug views.
-            </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScope.RegisterKey(Celeste.Mod.Procedurline.DataScopeKey)">
             <summary>
@@ -291,11 +281,6 @@
             When <c>true</c>, calls to <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.InvalidateRegistrars" /> behave the same as calls to <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" />
             </summary>
         </member>
-        <member name="F:Celeste.Mod.Procedurline.DataScopeKey.DataStore">
-            <summary>
-            Contains the dictionary used to store scope data entries. These entries can be used to store auxiliary data along with data keys, which can then be efficiently queried by e.g. data processors.
-            </summary>
-        </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Dispose">
             <summary>
             Disposes the scope key. This effectively performs a call to <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.Invalidate" /> before destryoing the key.
@@ -309,7 +294,7 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.Clone">
             <summary>
-            Clones the scope key, returning an almost identical copy of it. The cloned key will not own any objects the original key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, and have <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.InvalidateOnRegistrarInvalidation" /> set to <c>false</c>.
+            Clones the scope key, returning an almost identical copy of it. The cloned key will not own any objects the original key took ownership of using <see cref="M:Celeste.Mod.Procedurline.DataScopeKey.TakeOwnership(System.IDisposable)" />, and have <see cref="F:Celeste.Mod.Procedurline.DataScopeKey.InvalidateOnRegistrarInvalidation" /> set to <c>true</c>.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.DataScopeKey.RegisterScopes(Celeste.Mod.Procedurline.DataScopeKey)">
@@ -454,11 +439,6 @@
             <see cref="T:Celeste.Mod.Procedurline.DataProcessorMultiplexer`3" />
             <see cref="T:Celeste.Mod.Procedurline.AsyncDataProcessorMultiplexer`3" />
             <see cref="T:Celeste.Mod.Procedurline.SpriteMultiplexer" />
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.DataScopeMultiplexer`1.GetScopeKeyMuxIndex(Celeste.Mod.Procedurline.DataScopeKey)">
-            <summary>
-            Gets the <see cref="T:Celeste.Mod.Procedurline.DataScopeKey" />'s registered multiplexing index, or <c>-1</c> if no index is registered
-            </summary>
         </member>
         <member name="P:Celeste.Mod.Procedurline.DataScopeMultiplexer`1.MuxIndex">
             <summary>
@@ -661,6 +641,11 @@
             Creates an <see cref="T:Celeste.Mod.Procedurline.DisposablePoolComponent" />, adds it to a given entity, and returns its disposable pool
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.GCCallback">
+            <summary>
+            A helper class which calls a callback every time a garbage collector generation occurs
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.MethodVirtualizerDetour">
             <summary>
             Implements a detour, which redirects invocations of a non-virtual base method to a virtual method contained in a child class, if the instance is of that type.
@@ -755,17 +740,17 @@
             A subclass of <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" /> which also holds <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData" />.
             </summary>
         </member>
-        <member name="F:Celeste.Mod.Procedurline.PlayerTextureUtils.MAX_FACE_Y">
+        <member name="F:Celeste.Mod.Procedurline.PlayerUtils.MAX_FACE_Y">
             <summary>
             The maximum Y coordinate a face pixel can appear on
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.PlayerTextureUtils.MergePlayerComponents(Celeste.Mod.Procedurline.TexturePartitioning)">
+        <member name="M:Celeste.Mod.Procedurline.PlayerUtils.MergePlayerComponents(Celeste.Mod.Procedurline.TexturePartitioning)">
             <summary>
             Merge all partitions which belong to the same component of the player's sprite.
             </summary>
         </member>
-        <member name="M:Celeste.Mod.Procedurline.PlayerTextureUtils.IsFaceComponent(Celeste.Mod.Procedurline.TexturePartitioning,System.Int32)">
+        <member name="M:Celeste.Mod.Procedurline.PlayerUtils.IsFaceComponent(Celeste.Mod.Procedurline.TexturePartitioning,System.Int32)">
             <summary>
             Checks if the given partiton ID belongs to the player's face component.
             </summary>
@@ -1173,6 +1158,11 @@
             Obtains the animation's data in a safe manner. For dynamic sprite animations, this obtains the animation data in a thread safe way.
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.ScaledMTexture">
+            <summary>
+            A subclass of <see cref="T:Monocle.MTexture" /> which allows one to apply a scale vector when drawing
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.TextureCacheEvictor">
             <summary>
             Handles cached texture data eviction. Procedurline caches texture data in RAM to improve performance, but will evict it if memory gets low, or a certain maximum size gets exceeded. This class handles the implementation of this mechanism.
@@ -1320,27 +1310,9 @@
             Gets the cached texture data, or null if no data is cached. Note that the returned texture data can become disposed at any time if <see cref="F:Celeste.Mod.Procedurline.TextureOwner.LOCK" /> isn't held.
             </summary>
         </member>
-        <member name="T:Celeste.Mod.Procedurline.TextureHeap">
-            <summary>
-            Implements a simple texture heap, which can be used to merge multiple texture data buffers into one big atlas
-            </summary>
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.TextureHeap.AddTexture(Celeste.Mod.Procedurline.TextureData)">
-            <summary>
-            Adds texture data to the heap
-            </summary>
-            <returns>
-            Returns the subrectangle of the atlas texture corresponding to the added texture
-            </returns>
-        </member>
-        <member name="M:Celeste.Mod.Procedurline.TextureHeap.CreateAtlasTexture">
-            <summary>
-            Creates the atlas texture
-            </summary>
-        </member>
         <member name="T:Celeste.Mod.Procedurline.TextureManager">
             <summary>
-            Manages texture creation / lifecycle / data upload / etc.
+            Manages texture creation / lifecycle / data download and upload / etc.
             </summary>
         </member>
         <member name="M:Celeste.Mod.Procedurline.TextureManager.GetHandle(Monocle.VirtualTexture)">
@@ -1383,6 +1355,24 @@
         <member name="M:Celeste.Mod.Procedurline.TextureScope.Clear">
             <summary>
             Clears and disposes all textures and sub-scopes owned by this scope
+            </summary>
+        </member>
+        <member name="T:Celeste.Mod.Procedurline.TextureHeap">
+            <summary>
+            Implements a simple texture heap, which can be used to merge multiple texture data buffers into one big atlas
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHeap.AddTexture(Celeste.Mod.Procedurline.TextureData)">
+            <summary>
+            Adds texture data to the heap
+            </summary>
+            <returns>
+            Returns the subrectangle of the atlas texture corresponding to the added texture
+            </returns>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.TextureHeap.CreateAtlasTexture">
+            <summary>
+            Creates the atlas texture
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.TexturePartitioning">

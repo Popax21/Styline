@@ -33,7 +33,7 @@ namespace Celeste.Mod.Styline {
             //Find the face partition
             TexturePartitioning texPart = TexturePartitioning.CreateColorComponentPartitions(tex);
             texPart.MergePlayerComponents();
-            int facePart = texPart.FindPartition((i, p) => PlayerTextureUtils.IsFaceComponent(texPart, i));
+            int facePart = texPart.FindPartition((i, p) => PlayerUtils.IsFaceComponent(texPart, i));
             if(facePart < 0) return false;
 
             //Calculate the blush Y coordinate

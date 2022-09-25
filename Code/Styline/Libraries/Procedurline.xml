@@ -689,6 +689,11 @@
             Patches a SFX in a vanilla method, by replacing it with one given by a property at runtime. The property can be virtual, but the base implementation must return the SFX to be replaced.
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.PlayerHairSettingsData">
+            <summary>
+            Holds the player's hair settings.
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.PlayerHairColorData">
             <summary>
             Holds the player's hair colors.
@@ -702,11 +707,6 @@
         <member name="M:Celeste.Mod.Procedurline.PlayerHairColorData.RemoveAlpha">
             <summary>
             Returns a <see cref="T:Celeste.Mod.Procedurline.PlayerHairColorData" /> instance with all alpha components removed.
-            </summary>
-        </member>
-        <member name="T:Celeste.Mod.Procedurline.PlayerHairSettingsData">
-            <summary>
-            Holds the player's hair settings.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.PlayerHairNodeData">
@@ -729,16 +729,33 @@
             Holds additional per-frame player metadata.
             </summary>
         </member>
+        <member name="T:Celeste.Mod.Procedurline.IPlayerSpriteAnimation">
+            <summary>
+            An interface which represents animations which also hold player animation metadata. When implemented by <see cref="T:Celeste.Mod.Procedurline.CustomSpriteAnimation" />, Procedurline will utilize the data they provide as the metadata when if their animation is part of a <see cref="T:Celeste.PlayerSprite" />.
+            This interface is implemented by <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation" /> and <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationData" /> by default.
+            </summary>
+            <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation" />
+            <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationData" />
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.IPlayerSpriteAnimation.GetPlayerAnimationMetadata(System.Int32)">
+            <summary>
+            Returns the player sprite animation metadata for a particular animation frame
+            </summary>
+        </member>
         <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation">
             <summary>
             A subclass of <see cref="T:Monocle.Sprite.Animation" /> which also holds <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData" />.
             Procedurline replaces all animation references in <see cref="T:Celeste.PlayerSprite" />s with instances of <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation" />, which allow sprite animation processor to change this metadata as well.
             </summary>
+            <see cref="T:Celeste.Mod.Procedurline.IPlayerSpriteAnimation" />
+            <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationData" />
         </member>
         <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationData">
             <summary>
             A subclass of <see cref="T:Celeste.Mod.Procedurline.SpriteAnimationData" /> which also holds <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimationFrameData" />.
             </summary>
+            <see cref="T:Celeste.Mod.Procedurline.IPlayerSpriteAnimation" />
+            <see cref="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation" />
         </member>
         <member name="F:Celeste.Mod.Procedurline.PlayerUtils.MAX_FACE_Y">
             <summary>

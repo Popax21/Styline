@@ -13,7 +13,7 @@ namespace Celeste.Mod.Styline {
         public readonly Color BlushColor;
 
         public BlushFilter(Color blushColor) {
-            BlushColor = blushColor.RemoveAlpha();
+            BlushColor = blushColor;
         }
 
         public void RegisterScopes(Sprite target, DataScopeKey key) {}

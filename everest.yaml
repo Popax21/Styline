@@ -4,7 +4,7 @@
   Dependencies:
     - Name: Everest
       Version: 1.0.0
-    - Name: Procedurline
+    - Name: ProcedurlineV2
       Version: 2.0.1
   OptionalDependencies:
     - Name: CelesteNet.Client

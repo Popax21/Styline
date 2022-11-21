@@ -20,11 +20,12 @@ namespace Celeste.Mod.Styline {
 
         public bool ProcessData(Sprite target, DataScopeKey key, string animId, ref SpriteAnimationData data) {
             if(BlushColor.A == 0) return false;
-            if(data == null || !(data is PlayerSpriteAnimationData playerAnimData)) return false;
+            if(data == null || !(target is PlayerSprite psprite)) return false;
 
             bool didModify = false;
             for(int frameIdx = 0; frameIdx < data.Frames.Length; frameIdx++) {
-                didModify |= ProcessFrame(animId, playerAnimData.PlayerFrameData[frameIdx].HairFrame, data.Frames[frameIdx].TextureData);
+                if(!(psprite.GetPlayerAnimationMetadata(animId, frameIdx) is PlayerSpriteAnimationFrameData frameMD)) continue;
+                didModify |= ProcessFrame(animId, frameMD.HairFrame, data.Frames[frameIdx].TextureData);
             }
             return didModify;
         }

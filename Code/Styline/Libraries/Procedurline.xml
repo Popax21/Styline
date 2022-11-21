@@ -648,7 +648,7 @@
         </member>
         <member name="T:Celeste.Mod.Procedurline.MethodVirtualizerDetour">
             <summary>
-            Implements a detour, which redirects invocations of a non-virtual base method to a virtual method contained in a child class, if the instance is of that type.
+            Implements a detour which redirects invocations of a non-virtual base method to a virtual method contained in a child class, if the instance is of that type.
             Optionally also redirects the virtual method's base implementation back to the non-virtual one, which allows one to retroactively make a method virtual.
             </summary>
         </member>
@@ -739,7 +739,7 @@
         </member>
         <member name="M:Celeste.Mod.Procedurline.IPlayerSpriteAnimation.GetPlayerAnimationMetadata(System.Int32)">
             <summary>
-            Returns the player sprite animation metadata for a particular animation frame
+            Returns the player sprite animation metadata for a particular animation frame. When <c>null</c> is returned, the vanilla metadata will be used
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.PlayerSpriteAnimation">
@@ -770,6 +770,16 @@
         <member name="M:Celeste.Mod.Procedurline.PlayerUtils.IsFaceComponent(Celeste.Mod.Procedurline.TexturePartitioning,System.Int32)">
             <summary>
             Checks if the given partiton ID belongs to the player's face component.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerUtils.GetVanillaPlayerAnimationMetadata(Celeste.PlayerSprite,System.String,System.Int32)">
+            <summary>
+            Returns the vanilla player animation metadata for a given frame.
+            </summary>
+        </member>
+        <member name="M:Celeste.Mod.Procedurline.PlayerUtils.GetPlayerAnimationMetadata(Celeste.PlayerSprite,System.String,System.Int32)">
+            <summary>
+            Returns the player animation metadata for a given frame, falling back to vanilla logic if required.
             </summary>
         </member>
         <member name="T:Celeste.Mod.Procedurline.CustomSprite">

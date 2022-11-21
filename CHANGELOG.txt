@@ -1,4 +1,8 @@
 ---------- CHANGELOG VERSION 1.0.1 ----------
+- Adapt for reworked player animation metadata API
+
+
+---------- CHANGELOG VERSION 1.0.1 ----------
 - Bump Procedurline version
 
 ---------- CHANGELOG VERSION 1.0 ----------

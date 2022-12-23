@@ -37,13 +37,13 @@ namespace Celeste.Mod.Styline {
         private void AttributesChangedHandler(IScopedInvalidatable scope) {
             //Send current attributes
             IPlayerAttributes attrs = StylineModule.PlayerAttributes;
-            if(clientCtx.Client != null && attrs != null) clientCtx.Client.Send(new DataPlayerAttributes(clientCtx.Client.PlayerInfo, attrs));
+            if(clientCtx.Client?.PlayerInfo != null && attrs != null) clientCtx.Client.Send(new DataPlayerAttributes(clientCtx.Client.PlayerInfo, attrs));
         }
 
         public void Handle(CelesteNetConnection con, DataReady data) {
             //Send current attributes
             IPlayerAttributes attrs = StylineModule.PlayerAttributes;
-            if(clientCtx.Client != null && attrs != null) {
+            if(clientCtx.Client?.PlayerInfo != null && attrs != null) {
                 clientCtx.Client.Send(new DataPlayerAttributes(clientCtx.Client.PlayerInfo, attrs));
             }
         }

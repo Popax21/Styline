@@ -1,4 +1,4 @@
 HairOffsets:
-- {X: -4, Y: -4}
-- {X: -3, Y: -3}
+  - {X: -4, Y: -4}
+  - {X: -3, Y: -3}
 Texture: Styline/Player/Hair/Accessories/clip

@@ -124,7 +124,9 @@ namespace Celeste.Mod.Styline {
                         blushFilter = new BlushFilter(attributes.BlushColor);
 
                         //Create hair accessory
-                        hairAccessory = new HairAccessory(attributes.HairAccessory, attributes.HairAccessoryColor, h => TargetSelector(h.Entity));
+                        if(!string.IsNullOrEmpty(attributes.HairAccessory.Texture)) {
+                            hairAccessory = new HairAccessory(attributes.HairAccessory, attributes.HairAccessoryColor, h => TargetSelector(h.Entity));
+                        }
                     }
                 }
 

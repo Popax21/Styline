@@ -4,6 +4,7 @@
         <LangVersion>8.0</LangVersion>
         <ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>None</ResolveAssemblyWarnOrErrorOnTargetArchitectureMismatch>
         <CelesteGamePath Condition="'$(CELESTEGAMEPATH)' == ''">..\..\..\..</CelesteGamePath>
+        <PathMap>$(MSBuildProjectDirectory)=X:\Styline\</PathMap>
     </PropertyGroup>
 
     <ItemDefinitionGroup>

@@ -50,7 +50,7 @@ namespace Celeste.Mod.Styline {
                 values.Clear();
                 LoadWildcardContent(Attribute.DirectoryPath, Attribute.AssetType, (ModAsset asset, string name) => {
                     Logger.Log(Module.Metadata.Name, $"Loading value '{name}' for setting '{Property.Name}'");
-                    values[name] = deserializeMethod.Invoke(asset, Array.Empty<object>());
+                    values[name] = deserializeMethod.Invoke(asset, new object[0]);
                     keys.Add(name);
                 });
 

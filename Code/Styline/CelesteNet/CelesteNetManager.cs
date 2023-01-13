@@ -59,6 +59,8 @@ namespace Celeste.Mod.Styline {
         }
 
         public void Handle(CelesteNetConnection con, DataPlayerAttributes data) {
+            if(data.Player == clientCtx.Client?.PlayerInfo) return;
+
             MainThreadHelper.Do(() => {
                 //Get and update processor
                 PlayerProcessor processor = ghostProcessors.GetOrAdd(data.Player, _ => {

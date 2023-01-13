@@ -30,8 +30,8 @@ namespace Celeste.Mod.Styline {
 
         public bool ProcessData(Sprite target, DataScopeKey key, int id, ref SpriteAnimationData.AnimationFrame data) {
             //Iterate over all pixels in the shirt
-            for(int x = 0; x < data.Width; x++) {
-                for(int y = 0; y < data.Height; y++) {
+            for(int x = 0; x < data.TextureData.Width; x++) {
+                for(int y = 0; y < data.TextureData.Height; y++) {
                     //Replace color
                     if(data.TextureData[x,y] == PlayerUtils.SHIRT_PRIMARY_COLOR) data.TextureData[x,y] = ColorData.PrimaryColor;
                     else if(data.TextureData[x,y] == PlayerUtils.SHIRT_SECONDARY_COLOR) data.TextureData[x,y] = ColorData.SecondaryColor;
